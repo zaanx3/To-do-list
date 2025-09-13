@@ -5,8 +5,8 @@ self.addEventListener('install', function (e) {
         '/To-do-list/',
         '/To-do-list/index.html',
         '/To-do-list/manifest.json',
-        '/To-do-lidt/service-worker.js',
-        '/To-do-lidt/icon.png'
+        '/To-do-list/service-worker.js',
+        '/To-do-list/icon.png'
       ]);
     })
   );
@@ -19,4 +19,5 @@ self.addEventListener('fetch', function (e) {
     })
   );
 });
+
 
