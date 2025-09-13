@@ -102,30 +102,61 @@
     });
   </script>
 
-  <!-- PWA Installation -->
-  <script>
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
+ <script>
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
 
-      const installBtn = document.createElement("button");
-      installBtn.textContent = "Install App";
-      installBtn.style.marginTop = "20px";
-      document.body.appendChild(installBtn);
+    // Create banner container
+    const banner = document.createElement("div");
+    banner.style = `
+      background: #4CAF50;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-family: sans-serif;
+      font-size: 16px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    `;
+    banner.textContent = "📲 Install this app for faster access! ";
 
-      installBtn.addEventListener("click", () => {
-        installBtn.remove();
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(choice => {
-          if (choice.outcome === 'accepted') {
-            console.log("App installed");
-          }
-          deferredPrompt = null;
-        });
+    // Create install button
+    const installBtn = document.createElement("button");
+    installBtn.textContent = "Install";
+    installBtn.style = `
+      margin-left: 10px;
+      padding: 6px 12px;
+      background: white;
+      color: #4CAF50;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    `;
+
+    // Append button to banner
+    banner.appendChild(installBtn);
+    document.body.appendChild(banner);
+
+    // Handle install click
+    installBtn.addEventListener("click", () => {
+      banner.remove();
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(choice => {
+        if (choice.outcome === 'accepted') {
+          console.log("App installed");
+        }
+        deferredPrompt = null;
       });
     });
-  </script>
+  });
+</script>
+
 
   <!-- Register Service Worker -->
   <script>
@@ -139,6 +170,7 @@
   </script>
 </body>
 </html>
+
 
 
 
