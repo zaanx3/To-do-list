@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zaanx3.github.io/To-do-list/sitemap.xml
