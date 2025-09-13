@@ -102,7 +102,12 @@
     });
   </script>
 
- <script>
+<script>
+  // Check if app is already installed
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    console.log("App is already installed");
+  }
+
   let deferredPrompt;
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
@@ -139,11 +144,9 @@
       cursor: pointer;
     `;
 
-    // Append button to banner
     banner.appendChild(installBtn);
     document.body.appendChild(banner);
 
-    // Handle install click
     installBtn.addEventListener("click", () => {
       banner.remove();
       deferredPrompt.prompt();
@@ -158,6 +161,7 @@
 </script>
 
 
+
   <!-- Register Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
@@ -170,6 +174,7 @@
   </script>
 </body>
 </html>
+
 
 
 
