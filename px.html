@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Task List App</title>
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.png" />
+  <meta name="theme-color" content="#4CAF50" />
+</head>
+<body>
+  <h1>Task List</h1>
+
+  <input type="text" id="input" placeholder="Enter task" aria-label="Task Input" />
+  <button onclick="addTask()">Add</button>
+
+  <ul id="lists"></ul>
+
+  <button onclick="downloadTasks()">Download Tasks</button>
+
+  <!-- App Logic -->
+  <script>
+    let editingLi = null;
+
+    function addTask(text) {
+      const input = document.getElementById("input");
+      const taskText = (text || input.value).trim();
+      if (!taskText) return;
+
+      if (editingLi) {
+        editingLi.querySelector("span").textContent = taskText;
+        editingLi = null;
+        input.value = "";
+        saveTasks();
+        return;
+      }
+
+      const li = document.createElement("li");
+      const span = document.createElement("span");
+      span.textContent = taskText;
+
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "Edit";
+      editBtn.onclick = () => {
+        input.value = span.textContent;
+        editingLi = li;
+      };
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "Delete";
+      deleteBtn.onclick = () => {
+        if (editingLi === li) {
+          editingLi = null;
+          input.value = "";
+        }
+        li.remove();
+        saveTasks();
+      };
+
+      li.appendChild(span);
+      li.appendChild(editBtn);
+      li.appendChild(deleteBtn);
+      document.getElementById("lists").appendChild(li);
+      input.value = "";
+      saveTasks();
+    }
+
+    function saveTasks() {
+      const tasks = Array.from(document.querySelectorAll("#lists span")).map(
+        span => span.textContent
+      );
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function downloadTasks() {
+      const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+      const blob = new Blob([tasks.join("\n")], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "tasks.txt";
+      link.click();
+    }
+
+    window.addEventListener("load", () => {
+      const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+      tasks.forEach(task => addTask(task));
+    });
+  </script>
+
+  <!-- PWA Installation -->
+  <script>
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+
+      const installBtn = document.createElement("button");
+      installBtn.textContent = "Install App";
+      installBtn.style.marginTop = "20px";
+      document.body.appendChild(installBtn);
+
+      installBtn.addEventListener("click", () => {
+        installBtn.remove();
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choice => {
+          if (choice.outcome === 'accepted') {
+            console.log("App installed");
+          }
+          deferredPrompt = null;
+        });
+      });
+    });
+  </script>
+
+  <!-- Register Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log("Service Worker registered"))
+          .catch(err => console.error("Service Worker error", err));
+      });
+    }
+  </script>
+</body>
+</html>
