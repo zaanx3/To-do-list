@@ -1,6 +1,6 @@
 {
-  "name": "Task List App",
-  "short_name": "Dev JD Michaels",
+  "name": "zaanx3 ToDoList",
+  "short_name": "Tasks",
   "start_url": "/To-do-list/",
   "scope": "/To-do-list/",
   "display": "standalone",
@@ -19,6 +19,7 @@
     }
   ]
 }
+
 
 
 
