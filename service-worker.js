@@ -2,11 +2,11 @@ self.addEventListener('install', function (e) {
   e.waitUntil(
     caches.open('task-app').then(function (cache) {
       return cache.addAll([
-        '/task-pwa/',
-        '/task-pwa/index.html',
-        '/task-pwa/manifest.json',
-        '/task-pwa/service-worker.js',
-        '/task-pwa/icon.png'
+        '/To-do-list/',
+        '/To-do-list/index.html',
+        '/To-do-list/manifest.json',
+        '/To-do-lidt/service-worker.js',
+        '/To-do-lidt/icon.png'
       ]);
     })
   );
@@ -19,3 +19,4 @@ self.addEventListener('fetch', function (e) {
     })
   );
 });
+
